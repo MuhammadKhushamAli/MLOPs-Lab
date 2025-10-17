@@ -1,15 +1,11 @@
-# params.yaml
-prepare:
-  random_seed: 42
-
-features:
+data:
+  input_path: data/zameen-updated.csv
+  target: price
   test_size: 0.2
   random_state: 42
 
 train:
+  model_type: RandomForestRegressor
   n_estimators: 100
-  max_depth: 5
+  max_depth: 10
   random_state: 42
-
-evaluate:
-  average: macro

@@ -1,0 +1,70 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py --out_dir data
+    params:
+      params.yaml:
+        prepare.random_seed: 42
+    outs:
+    - path: data/iris.csv
+      hash: md5
+      md5: 21d441a28bce4417276097df955afc50
+      size: 2928
+  features:
+    cmd: python src/features.py --in_csv data/zameen-updated.csv --out_dir data 
+      --test_size 0.2 --random_state 42
+    deps:
+    - path: data/zameen-updated.csv
+      hash: md5
+      md5: 862ce971c086da8903e8ecc7c8a52c92
+      size: 49522076
+    - path: src/features.py
+      hash: md5
+      md5: 4eef2571ecc2529d1ebcf65c25f4ac44
+      size: 1864
+    params:
+      params.yaml:
+        data.input_path: data/zameen-updated.csv
+        data.random_state: 42
+        data.target: price
+        data.test_size: 0.2
+    outs:
+    - path: data/features.csv
+      hash: md5
+      md5: 397e7fd55857d957c74721c3107b0244
+      size: 6172736
+    - path: data/target.csv
+      hash: md5
+      md5: dac33f75719a46848c896affa336031b
+      size: 1209770
+  train:
+    cmd: python src/train.py --features data/features.csv --target 
+      data/target.csv --model_dir model
+    deps:
+    - path: data/features.csv
+      hash: md5
+      md5: 397e7fd55857d957c74721c3107b0244
+      size: 6172736
+    - path: data/target.csv
+      hash: md5
+      md5: dac33f75719a46848c896affa336031b
+      size: 1209770
+    - path: src/train.py
+      hash: md5
+      md5: 75f10596b58a706bb138299e631b412c
+      size: 1696
+    params:
+      params.yaml:
+        train.max_depth: 10
+        train.model_type: RandomForestRegressor
+        train.n_estimators: 100
+        train.random_state: 42
+    outs:
+    - path: metrics/eval.json
+      hash: md5
+      md5: 1f515164b5cb66a6683aad3fbc4da2d1
+      size: 95
+    - path: model/model.pkl
+      hash: md5
+      md5: 08bef66537feded191896ad026d57a37
+      size: 9437617

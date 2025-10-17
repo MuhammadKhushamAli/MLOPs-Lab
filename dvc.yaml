@@ -1,46 +1,31 @@
 stages:
-  prepare:
-    cmd: python src/prepare.py --out_dir data
-    outs:
-      - data/iris.csv
-    params:
-      - prepare.random_seed
-
   features:
-    cmd: python src/features.py --in_csv data/iris.csv --out_dir data --test_size ${features.test_size} --random_state ${features.random_state}
+    cmd: python src/features.py --in_csv ${data.input_path} --out_dir data --test_size ${data.test_size} --random_state ${data.random_state}
     deps:
-      - data/iris_dataset.csv
       - src/features.py
-    outs:
-      - data/X_train.npy
-      - data/X_test.npy
-      - data/y_train.npy
-      - data/y_test.npy
+      - ${data.input_path}
     params:
-      - features.test_size
-      - features.random_state
+      - data.input_path
+      - data.test_size
+      - data.random_state
+      - data.target
+    outs:
+      - data/features.csv
+      - data/target.csv
 
   train:
-    cmd: python src/train.py --data_dir data --model_out model.pkl
+    cmd: python src/train.py --features data/features.csv --target data/target.csv --model_dir model
     deps:
-      - data/X_train.npy
-      - data/y_train.npy
       - src/train.py
-    outs:
-      - model.pkl
+      - data/features.csv
+      - data/target.csv
     params:
+      - train.model_type
       - train.n_estimators
       - train.max_depth
       - train.random_state
-
-  evaluate:
-    cmd: python src/evaluate.py --data_dir data --model model.pkl --out metrics/eval.json
-    deps:
-      - model.pkl
-      - data/X_test.npy
-      - data/y_test.npy
-      - src/evaluate.py
     outs:
-      - metrics/eval.json
-    params:
-      - evaluate.average
+      - model/model.pkl
+    metrics:
+      - metrics/eval.json:
+          cache: false
