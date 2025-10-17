@@ -42,6 +42,10 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 def index():
     return render_template("index.html", feature_meta=feature_meta)
 
+@app.route("/login", methods=["GET"])
+def login():
+    return render_template("login.html", feature_meta=feature_meta)
+
 @app.route("/predict", methods=["POST"])
 def predict():
     # build input vector in same order as feature_list
