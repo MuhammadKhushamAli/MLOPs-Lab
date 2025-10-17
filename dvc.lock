@@ -51,8 +51,8 @@ stages:
       size: 1209770
     - path: src/train.py
       hash: md5
-      md5: 75f10596b58a706bb138299e631b412c
-      size: 1696
+      md5: f4e33948667c1dcaff93ff888ad15f3f
+      size: 2371
     params:
       params.yaml:
         train.max_depth: 10

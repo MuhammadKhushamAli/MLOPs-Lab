@@ -5,10 +5,10 @@ import numpy as np
 from flask import Flask, render_template, request, redirect, url_for
 
 APP_ROOT = os.path.dirname(__file__)
-MODEL_DIR = os.path.join(APP_ROOT, "models")
+MODEL_DIR = os.path.join(APP_ROOT, "model")
 
 # Load artifacts
-model = joblib.load(os.path.join(MODEL_DIR, "house_price_model.pkl"))
+model = joblib.load(os.path.join(MODEL_DIR, "model.pkl"))
 feature_list = joblib.load(os.path.join(MODEL_DIR, "model_features.pkl"))  # ordered
 label_encoders = joblib.load(os.path.join(MODEL_DIR, "label_encoders.pkl"))
 feature_field_map = joblib.load(os.path.join(MODEL_DIR, "feature_field_map.pkl"))
